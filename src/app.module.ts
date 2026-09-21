@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { HealthModule } from './interface/http/health/health.module.js';
 import { ObserveModule } from './infrastructure/observability/observability.module.js';
+import { DebtModule } from './interface/http/debts/debt.module.js';
+import { AuthModule } from './interface/http/auth/auth.module.js';
+import { DatabaseModule } from './infrastructure/database/database.module.js';
 
 @Module({
   imports: [
@@ -12,6 +15,9 @@ import { ObserveModule } from './infrastructure/observability/observability.modu
       serviceId: 'plodnhee-be',
     }),
     HealthModule,
+    DatabaseModule,
+    AuthModule,
+    DebtModule,
   ],
 })
 export class AppModule {}
