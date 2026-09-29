@@ -54,6 +54,9 @@ export const ModelName = {
   User: 'User',
   Person: 'Person',
   Group: 'Group',
+  GroupMember: 'GroupMember',
+  GroupCharge: 'GroupCharge',
+  MemberDiscount: 'MemberDiscount',
   Bill: 'Bill'
 } as const
 
@@ -98,10 +101,48 @@ export const GroupScalarFieldEnum = {
   id: 'id',
   ownerId: 'ownerId',
   name: 'name',
+  totalOwed: 'totalOwed',
   createdAt: 'createdAt'
 } as const
 
 export type GroupScalarFieldEnum = (typeof GroupScalarFieldEnum)[keyof typeof GroupScalarFieldEnum]
+
+
+export const GroupMemberScalarFieldEnum = {
+  id: 'id',
+  groupId: 'groupId',
+  personId: 'personId',
+  balance: 'balance',
+  paymentStatus: 'paymentStatus',
+  createdAt: 'createdAt'
+} as const
+
+export type GroupMemberScalarFieldEnum = (typeof GroupMemberScalarFieldEnum)[keyof typeof GroupMemberScalarFieldEnum]
+
+
+export const GroupChargeScalarFieldEnum = {
+  id: 'id',
+  groupId: 'groupId',
+  amountPerPerson: 'amountPerPerson',
+  description: 'description',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt'
+} as const
+
+export type GroupChargeScalarFieldEnum = (typeof GroupChargeScalarFieldEnum)[keyof typeof GroupChargeScalarFieldEnum]
+
+
+export const MemberDiscountScalarFieldEnum = {
+  id: 'id',
+  groupId: 'groupId',
+  personId: 'personId',
+  amount: 'amount',
+  description: 'description',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt'
+} as const
+
+export type MemberDiscountScalarFieldEnum = (typeof MemberDiscountScalarFieldEnum)[keyof typeof MemberDiscountScalarFieldEnum]
 
 
 export const BillScalarFieldEnum = {

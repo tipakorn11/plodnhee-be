@@ -400,6 +400,9 @@ export const ModelName = {
   User: 'User',
   Person: 'Person',
   Group: 'Group',
+  GroupMember: 'GroupMember',
+  GroupCharge: 'GroupCharge',
+  MemberDiscount: 'MemberDiscount',
   Bill: 'Bill'
 } as const
 
@@ -416,7 +419,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "person" | "group" | "bill"
+    modelProps: "user" | "person" | "group" | "groupMember" | "groupCharge" | "memberDiscount" | "bill"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -642,6 +645,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    GroupMember: {
+      payload: Prisma.$GroupMemberPayload<ExtArgs>
+      fields: Prisma.GroupMemberFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GroupMemberFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupMemberPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GroupMemberFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupMemberPayload>
+        }
+        findFirst: {
+          args: Prisma.GroupMemberFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupMemberPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GroupMemberFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupMemberPayload>
+        }
+        findMany: {
+          args: Prisma.GroupMemberFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupMemberPayload>[]
+        }
+        create: {
+          args: Prisma.GroupMemberCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupMemberPayload>
+        }
+        createMany: {
+          args: Prisma.GroupMemberCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GroupMemberCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupMemberPayload>[]
+        }
+        delete: {
+          args: Prisma.GroupMemberDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupMemberPayload>
+        }
+        update: {
+          args: Prisma.GroupMemberUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupMemberPayload>
+        }
+        deleteMany: {
+          args: Prisma.GroupMemberDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GroupMemberUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GroupMemberUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupMemberPayload>[]
+        }
+        upsert: {
+          args: Prisma.GroupMemberUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupMemberPayload>
+        }
+        aggregate: {
+          args: Prisma.GroupMemberAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGroupMember>
+        }
+        groupBy: {
+          args: Prisma.GroupMemberGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GroupMemberGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GroupMemberCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GroupMemberCountAggregateOutputType> | number
+        }
+      }
+    }
+    GroupCharge: {
+      payload: Prisma.$GroupChargePayload<ExtArgs>
+      fields: Prisma.GroupChargeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GroupChargeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupChargePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GroupChargeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupChargePayload>
+        }
+        findFirst: {
+          args: Prisma.GroupChargeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupChargePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GroupChargeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupChargePayload>
+        }
+        findMany: {
+          args: Prisma.GroupChargeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupChargePayload>[]
+        }
+        create: {
+          args: Prisma.GroupChargeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupChargePayload>
+        }
+        createMany: {
+          args: Prisma.GroupChargeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GroupChargeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupChargePayload>[]
+        }
+        delete: {
+          args: Prisma.GroupChargeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupChargePayload>
+        }
+        update: {
+          args: Prisma.GroupChargeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupChargePayload>
+        }
+        deleteMany: {
+          args: Prisma.GroupChargeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GroupChargeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GroupChargeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupChargePayload>[]
+        }
+        upsert: {
+          args: Prisma.GroupChargeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GroupChargePayload>
+        }
+        aggregate: {
+          args: Prisma.GroupChargeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGroupCharge>
+        }
+        groupBy: {
+          args: Prisma.GroupChargeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GroupChargeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GroupChargeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GroupChargeCountAggregateOutputType> | number
+        }
+      }
+    }
+    MemberDiscount: {
+      payload: Prisma.$MemberDiscountPayload<ExtArgs>
+      fields: Prisma.MemberDiscountFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MemberDiscountFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemberDiscountPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MemberDiscountFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemberDiscountPayload>
+        }
+        findFirst: {
+          args: Prisma.MemberDiscountFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemberDiscountPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MemberDiscountFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemberDiscountPayload>
+        }
+        findMany: {
+          args: Prisma.MemberDiscountFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemberDiscountPayload>[]
+        }
+        create: {
+          args: Prisma.MemberDiscountCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemberDiscountPayload>
+        }
+        createMany: {
+          args: Prisma.MemberDiscountCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MemberDiscountCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemberDiscountPayload>[]
+        }
+        delete: {
+          args: Prisma.MemberDiscountDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemberDiscountPayload>
+        }
+        update: {
+          args: Prisma.MemberDiscountUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemberDiscountPayload>
+        }
+        deleteMany: {
+          args: Prisma.MemberDiscountDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MemberDiscountUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MemberDiscountUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemberDiscountPayload>[]
+        }
+        upsert: {
+          args: Prisma.MemberDiscountUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MemberDiscountPayload>
+        }
+        aggregate: {
+          args: Prisma.MemberDiscountAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMemberDiscount>
+        }
+        groupBy: {
+          args: Prisma.MemberDiscountGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MemberDiscountGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MemberDiscountCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MemberDiscountCountAggregateOutputType> | number
+        }
+      }
+    }
     Bill: {
       payload: Prisma.$BillPayload<ExtArgs>
       fields: Prisma.BillFieldRefs
@@ -780,10 +1005,48 @@ export const GroupScalarFieldEnum = {
   id: 'id',
   ownerId: 'ownerId',
   name: 'name',
+  totalOwed: 'totalOwed',
   createdAt: 'createdAt'
 } as const
 
 export type GroupScalarFieldEnum = (typeof GroupScalarFieldEnum)[keyof typeof GroupScalarFieldEnum]
+
+
+export const GroupMemberScalarFieldEnum = {
+  id: 'id',
+  groupId: 'groupId',
+  personId: 'personId',
+  balance: 'balance',
+  paymentStatus: 'paymentStatus',
+  createdAt: 'createdAt'
+} as const
+
+export type GroupMemberScalarFieldEnum = (typeof GroupMemberScalarFieldEnum)[keyof typeof GroupMemberScalarFieldEnum]
+
+
+export const GroupChargeScalarFieldEnum = {
+  id: 'id',
+  groupId: 'groupId',
+  amountPerPerson: 'amountPerPerson',
+  description: 'description',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt'
+} as const
+
+export type GroupChargeScalarFieldEnum = (typeof GroupChargeScalarFieldEnum)[keyof typeof GroupChargeScalarFieldEnum]
+
+
+export const MemberDiscountScalarFieldEnum = {
+  id: 'id',
+  groupId: 'groupId',
+  personId: 'personId',
+  amount: 'amount',
+  description: 'description',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt'
+} as const
+
+export type MemberDiscountScalarFieldEnum = (typeof MemberDiscountScalarFieldEnum)[keyof typeof MemberDiscountScalarFieldEnum]
 
 
 export const BillScalarFieldEnum = {
@@ -868,6 +1131,20 @@ export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
  * Reference to a field of type 'Decimal[]'
  */
 export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PaymentStatus'
+ */
+export type EnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'PaymentStatus[]'
+ */
+export type ListEnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus[]'>
     
 
 
@@ -1038,6 +1315,9 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   person?: Prisma.PersonOmit
   group?: Prisma.GroupOmit
+  groupMember?: Prisma.GroupMemberOmit
+  groupCharge?: Prisma.GroupChargeOmit
+  memberDiscount?: Prisma.MemberDiscountOmit
   bill?: Prisma.BillOmit
 }
 

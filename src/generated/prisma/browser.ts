@@ -33,6 +33,21 @@ export type Person = Prisma.PersonModel
  */
 export type Group = Prisma.GroupModel
 /**
+ * Model GroupMember
+ * 
+ */
+export type GroupMember = Prisma.GroupMemberModel
+/**
+ * Model GroupCharge
+ * 
+ */
+export type GroupCharge = Prisma.GroupChargeModel
+/**
+ * Model MemberDiscount
+ * 
+ */
+export type MemberDiscount = Prisma.MemberDiscountModel
+/**
  * Model Bill
  * 
  */

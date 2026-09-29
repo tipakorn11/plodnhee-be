@@ -29,11 +29,19 @@ one with `PATCH`, or remove exactly one with `DELETE`.
 | `POST` | `/people` | Create a person: `{ "name", "profileImageUrl?" }` |
 | `GET` | `/people` | List people |
 | `POST` | `/groups` | Create a group: `{ "name" }` |
+| `POST` | `/groups/:groupId/members` | Add a group member: `{ "personId" }` |
 | `GET` | `/groups` | List groups with member totals |
 | `GET` | `/groups/:groupId` | Get a group, bills, and amounts owed per person |
 | `POST` | `/groups/:groupId/bills` | Add a bill: `{ "personId", "amount", "description?" }` |
 | `PATCH` | `/bills/:billId` | Change a bill amount or description |
 | `DELETE` | `/bills/:billId` | Remove one bill |
+| `POST` | `/expense-groups/:groupId/charges` | Add one positive `{ "amountPerPerson", "description?", "createdBy?" }` charge to every member atomically |
+| `POST` | `/expense-groups/:groupId/members/:personId/discounts` | Add a positive individual discount: `{ "amount", "description?", "createdBy?" }` |
+
+`POST /groups` also accepts an optional `memberIds` array. A charge requires at
+least one member. Group reads include `members` (their current balances and
+payment statuses), plus separate `charges` and `discounts` histories. Group-wide
+charges and person-level discounts use a single database transaction.
 
 `profileImageUrl` is optional and must be a public HTTPS URL. For a Vercel
 frontend, upload the image directly from the browser to an object-storage service

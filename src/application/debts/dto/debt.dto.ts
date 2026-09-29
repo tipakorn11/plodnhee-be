@@ -5,6 +5,21 @@ export interface CreatePersonDto {
 
 export interface CreateGroupDto {
   name: string;
+  memberIds?: string[];
+}
+
+export interface AddGroupMemberDto { personId: string; }
+
+export interface CreateGroupChargeDto {
+  amountPerPerson: number;
+  description?: string;
+  createdBy?: string;
+}
+
+export interface CreateMemberDiscountDto {
+  amount: number;
+  description?: string;
+  createdBy?: string;
 }
 
 export interface CreateBillDto {

@@ -20,14 +20,25 @@ export type GroupModel = runtime.Types.Result.DefaultSelection<Prisma.$GroupPayl
 
 export type AggregateGroup = {
   _count: GroupCountAggregateOutputType | null
+  _avg: GroupAvgAggregateOutputType | null
+  _sum: GroupSumAggregateOutputType | null
   _min: GroupMinAggregateOutputType | null
   _max: GroupMaxAggregateOutputType | null
+}
+
+export type GroupAvgAggregateOutputType = {
+  totalOwed: runtime.Decimal | null
+}
+
+export type GroupSumAggregateOutputType = {
+  totalOwed: runtime.Decimal | null
 }
 
 export type GroupMinAggregateOutputType = {
   id: string | null
   ownerId: string | null
   name: string | null
+  totalOwed: runtime.Decimal | null
   createdAt: Date | null
 }
 
@@ -35,6 +46,7 @@ export type GroupMaxAggregateOutputType = {
   id: string | null
   ownerId: string | null
   name: string | null
+  totalOwed: runtime.Decimal | null
   createdAt: Date | null
 }
 
@@ -42,15 +54,25 @@ export type GroupCountAggregateOutputType = {
   id: number
   ownerId: number
   name: number
+  totalOwed: number
   createdAt: number
   _all: number
 }
 
 
+export type GroupAvgAggregateInputType = {
+  totalOwed?: true
+}
+
+export type GroupSumAggregateInputType = {
+  totalOwed?: true
+}
+
 export type GroupMinAggregateInputType = {
   id?: true
   ownerId?: true
   name?: true
+  totalOwed?: true
   createdAt?: true
 }
 
@@ -58,6 +80,7 @@ export type GroupMaxAggregateInputType = {
   id?: true
   ownerId?: true
   name?: true
+  totalOwed?: true
   createdAt?: true
 }
 
@@ -65,6 +88,7 @@ export type GroupCountAggregateInputType = {
   id?: true
   ownerId?: true
   name?: true
+  totalOwed?: true
   createdAt?: true
   _all?: true
 }
@@ -107,6 +131,18 @@ export type GroupAggregateArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: GroupAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: GroupSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: GroupMinAggregateInputType
@@ -137,6 +173,8 @@ export type GroupGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   _count?: GroupCountAggregateInputType | true
+  _avg?: GroupAvgAggregateInputType
+  _sum?: GroupSumAggregateInputType
   _min?: GroupMinAggregateInputType
   _max?: GroupMaxAggregateInputType
 }
@@ -145,8 +183,11 @@ export type GroupGroupByOutputType = {
   id: string
   ownerId: string
   name: string
+  totalOwed: runtime.Decimal
   createdAt: Date
   _count: GroupCountAggregateOutputType | null
+  _avg: GroupAvgAggregateOutputType | null
+  _sum: GroupSumAggregateOutputType | null
   _min: GroupMinAggregateOutputType | null
   _max: GroupMaxAggregateOutputType | null
 }
@@ -173,18 +214,26 @@ export type GroupWhereInput = {
   id?: Prisma.StringFilter<"Group"> | string
   ownerId?: Prisma.StringFilter<"Group"> | string
   name?: Prisma.StringFilter<"Group"> | string
+  totalOwed?: Prisma.DecimalFilter<"Group"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFilter<"Group"> | Date | string
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   bills?: Prisma.BillListRelationFilter
+  members?: Prisma.GroupMemberListRelationFilter
+  charges?: Prisma.GroupChargeListRelationFilter
+  discounts?: Prisma.MemberDiscountListRelationFilter
 }
 
 export type GroupOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  totalOwed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   owner?: Prisma.UserOrderByWithRelationInput
   bills?: Prisma.BillOrderByRelationAggregateInput
+  members?: Prisma.GroupMemberOrderByRelationAggregateInput
+  charges?: Prisma.GroupChargeOrderByRelationAggregateInput
+  discounts?: Prisma.MemberDiscountOrderByRelationAggregateInput
 }
 
 export type GroupWhereUniqueInput = Prisma.AtLeast<{
@@ -194,19 +243,26 @@ export type GroupWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.GroupWhereInput | Prisma.GroupWhereInput[]
   ownerId?: Prisma.StringFilter<"Group"> | string
   name?: Prisma.StringFilter<"Group"> | string
+  totalOwed?: Prisma.DecimalFilter<"Group"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFilter<"Group"> | Date | string
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   bills?: Prisma.BillListRelationFilter
+  members?: Prisma.GroupMemberListRelationFilter
+  charges?: Prisma.GroupChargeListRelationFilter
+  discounts?: Prisma.MemberDiscountListRelationFilter
 }, "id">
 
 export type GroupOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  totalOwed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.GroupCountOrderByAggregateInput
+  _avg?: Prisma.GroupAvgOrderByAggregateInput
   _max?: Prisma.GroupMaxOrderByAggregateInput
   _min?: Prisma.GroupMinOrderByAggregateInput
+  _sum?: Prisma.GroupSumOrderByAggregateInput
 }
 
 export type GroupScalarWhereWithAggregatesInput = {
@@ -216,51 +272,70 @@ export type GroupScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Group"> | string
   ownerId?: Prisma.StringWithAggregatesFilter<"Group"> | string
   name?: Prisma.StringWithAggregatesFilter<"Group"> | string
+  totalOwed?: Prisma.DecimalWithAggregatesFilter<"Group"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Group"> | Date | string
 }
 
 export type GroupCreateInput = {
   id?: string
   name: string
+  totalOwed?: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutGroupsInput
   bills?: Prisma.BillCreateNestedManyWithoutGroupInput
+  members?: Prisma.GroupMemberCreateNestedManyWithoutGroupInput
+  charges?: Prisma.GroupChargeCreateNestedManyWithoutGroupInput
+  discounts?: Prisma.MemberDiscountCreateNestedManyWithoutGroupInput
 }
 
 export type GroupUncheckedCreateInput = {
   id?: string
   ownerId: string
   name: string
+  totalOwed?: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   bills?: Prisma.BillUncheckedCreateNestedManyWithoutGroupInput
+  members?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutGroupInput
+  charges?: Prisma.GroupChargeUncheckedCreateNestedManyWithoutGroupInput
+  discounts?: Prisma.MemberDiscountUncheckedCreateNestedManyWithoutGroupInput
 }
 
 export type GroupUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  totalOwed?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutGroupsNestedInput
   bills?: Prisma.BillUpdateManyWithoutGroupNestedInput
+  members?: Prisma.GroupMemberUpdateManyWithoutGroupNestedInput
+  charges?: Prisma.GroupChargeUpdateManyWithoutGroupNestedInput
+  discounts?: Prisma.MemberDiscountUpdateManyWithoutGroupNestedInput
 }
 
 export type GroupUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  totalOwed?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bills?: Prisma.BillUncheckedUpdateManyWithoutGroupNestedInput
+  members?: Prisma.GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
+  charges?: Prisma.GroupChargeUncheckedUpdateManyWithoutGroupNestedInput
+  discounts?: Prisma.MemberDiscountUncheckedUpdateManyWithoutGroupNestedInput
 }
 
 export type GroupCreateManyInput = {
   id?: string
   ownerId: string
   name: string
+  totalOwed?: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
 }
 
 export type GroupUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  totalOwed?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -268,6 +343,7 @@ export type GroupUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  totalOwed?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -285,13 +361,19 @@ export type GroupCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  totalOwed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type GroupAvgOrderByAggregateInput = {
+  totalOwed?: Prisma.SortOrder
 }
 
 export type GroupMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  totalOwed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -299,7 +381,12 @@ export type GroupMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  totalOwed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type GroupSumOrderByAggregateInput = {
+  totalOwed?: Prisma.SortOrder
 }
 
 export type GroupScalarRelationFilter = {
@@ -349,6 +436,56 @@ export type GroupUncheckedUpdateManyWithoutOwnerNestedInput = {
   deleteMany?: Prisma.GroupScalarWhereInput | Prisma.GroupScalarWhereInput[]
 }
 
+export type DecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type GroupCreateNestedOneWithoutMembersInput = {
+  create?: Prisma.XOR<Prisma.GroupCreateWithoutMembersInput, Prisma.GroupUncheckedCreateWithoutMembersInput>
+  connectOrCreate?: Prisma.GroupCreateOrConnectWithoutMembersInput
+  connect?: Prisma.GroupWhereUniqueInput
+}
+
+export type GroupUpdateOneRequiredWithoutMembersNestedInput = {
+  create?: Prisma.XOR<Prisma.GroupCreateWithoutMembersInput, Prisma.GroupUncheckedCreateWithoutMembersInput>
+  connectOrCreate?: Prisma.GroupCreateOrConnectWithoutMembersInput
+  upsert?: Prisma.GroupUpsertWithoutMembersInput
+  connect?: Prisma.GroupWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GroupUpdateToOneWithWhereWithoutMembersInput, Prisma.GroupUpdateWithoutMembersInput>, Prisma.GroupUncheckedUpdateWithoutMembersInput>
+}
+
+export type GroupCreateNestedOneWithoutChargesInput = {
+  create?: Prisma.XOR<Prisma.GroupCreateWithoutChargesInput, Prisma.GroupUncheckedCreateWithoutChargesInput>
+  connectOrCreate?: Prisma.GroupCreateOrConnectWithoutChargesInput
+  connect?: Prisma.GroupWhereUniqueInput
+}
+
+export type GroupUpdateOneRequiredWithoutChargesNestedInput = {
+  create?: Prisma.XOR<Prisma.GroupCreateWithoutChargesInput, Prisma.GroupUncheckedCreateWithoutChargesInput>
+  connectOrCreate?: Prisma.GroupCreateOrConnectWithoutChargesInput
+  upsert?: Prisma.GroupUpsertWithoutChargesInput
+  connect?: Prisma.GroupWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GroupUpdateToOneWithWhereWithoutChargesInput, Prisma.GroupUpdateWithoutChargesInput>, Prisma.GroupUncheckedUpdateWithoutChargesInput>
+}
+
+export type GroupCreateNestedOneWithoutDiscountsInput = {
+  create?: Prisma.XOR<Prisma.GroupCreateWithoutDiscountsInput, Prisma.GroupUncheckedCreateWithoutDiscountsInput>
+  connectOrCreate?: Prisma.GroupCreateOrConnectWithoutDiscountsInput
+  connect?: Prisma.GroupWhereUniqueInput
+}
+
+export type GroupUpdateOneRequiredWithoutDiscountsNestedInput = {
+  create?: Prisma.XOR<Prisma.GroupCreateWithoutDiscountsInput, Prisma.GroupUncheckedCreateWithoutDiscountsInput>
+  connectOrCreate?: Prisma.GroupCreateOrConnectWithoutDiscountsInput
+  upsert?: Prisma.GroupUpsertWithoutDiscountsInput
+  connect?: Prisma.GroupWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GroupUpdateToOneWithWhereWithoutDiscountsInput, Prisma.GroupUpdateWithoutDiscountsInput>, Prisma.GroupUncheckedUpdateWithoutDiscountsInput>
+}
+
 export type GroupCreateNestedOneWithoutBillsInput = {
   create?: Prisma.XOR<Prisma.GroupCreateWithoutBillsInput, Prisma.GroupUncheckedCreateWithoutBillsInput>
   connectOrCreate?: Prisma.GroupCreateOrConnectWithoutBillsInput
@@ -366,15 +503,23 @@ export type GroupUpdateOneRequiredWithoutBillsNestedInput = {
 export type GroupCreateWithoutOwnerInput = {
   id?: string
   name: string
+  totalOwed?: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   bills?: Prisma.BillCreateNestedManyWithoutGroupInput
+  members?: Prisma.GroupMemberCreateNestedManyWithoutGroupInput
+  charges?: Prisma.GroupChargeCreateNestedManyWithoutGroupInput
+  discounts?: Prisma.MemberDiscountCreateNestedManyWithoutGroupInput
 }
 
 export type GroupUncheckedCreateWithoutOwnerInput = {
   id?: string
   name: string
+  totalOwed?: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   bills?: Prisma.BillUncheckedCreateNestedManyWithoutGroupInput
+  members?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutGroupInput
+  charges?: Prisma.GroupChargeUncheckedCreateNestedManyWithoutGroupInput
+  discounts?: Prisma.MemberDiscountUncheckedCreateNestedManyWithoutGroupInput
 }
 
 export type GroupCreateOrConnectWithoutOwnerInput = {
@@ -410,21 +555,210 @@ export type GroupScalarWhereInput = {
   id?: Prisma.StringFilter<"Group"> | string
   ownerId?: Prisma.StringFilter<"Group"> | string
   name?: Prisma.StringFilter<"Group"> | string
+  totalOwed?: Prisma.DecimalFilter<"Group"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFilter<"Group"> | Date | string
+}
+
+export type GroupCreateWithoutMembersInput = {
+  id?: string
+  name: string
+  totalOwed?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutGroupsInput
+  bills?: Prisma.BillCreateNestedManyWithoutGroupInput
+  charges?: Prisma.GroupChargeCreateNestedManyWithoutGroupInput
+  discounts?: Prisma.MemberDiscountCreateNestedManyWithoutGroupInput
+}
+
+export type GroupUncheckedCreateWithoutMembersInput = {
+  id?: string
+  ownerId: string
+  name: string
+  totalOwed?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  bills?: Prisma.BillUncheckedCreateNestedManyWithoutGroupInput
+  charges?: Prisma.GroupChargeUncheckedCreateNestedManyWithoutGroupInput
+  discounts?: Prisma.MemberDiscountUncheckedCreateNestedManyWithoutGroupInput
+}
+
+export type GroupCreateOrConnectWithoutMembersInput = {
+  where: Prisma.GroupWhereUniqueInput
+  create: Prisma.XOR<Prisma.GroupCreateWithoutMembersInput, Prisma.GroupUncheckedCreateWithoutMembersInput>
+}
+
+export type GroupUpsertWithoutMembersInput = {
+  update: Prisma.XOR<Prisma.GroupUpdateWithoutMembersInput, Prisma.GroupUncheckedUpdateWithoutMembersInput>
+  create: Prisma.XOR<Prisma.GroupCreateWithoutMembersInput, Prisma.GroupUncheckedCreateWithoutMembersInput>
+  where?: Prisma.GroupWhereInput
+}
+
+export type GroupUpdateToOneWithWhereWithoutMembersInput = {
+  where?: Prisma.GroupWhereInput
+  data: Prisma.XOR<Prisma.GroupUpdateWithoutMembersInput, Prisma.GroupUncheckedUpdateWithoutMembersInput>
+}
+
+export type GroupUpdateWithoutMembersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  totalOwed?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutGroupsNestedInput
+  bills?: Prisma.BillUpdateManyWithoutGroupNestedInput
+  charges?: Prisma.GroupChargeUpdateManyWithoutGroupNestedInput
+  discounts?: Prisma.MemberDiscountUpdateManyWithoutGroupNestedInput
+}
+
+export type GroupUncheckedUpdateWithoutMembersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  totalOwed?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bills?: Prisma.BillUncheckedUpdateManyWithoutGroupNestedInput
+  charges?: Prisma.GroupChargeUncheckedUpdateManyWithoutGroupNestedInput
+  discounts?: Prisma.MemberDiscountUncheckedUpdateManyWithoutGroupNestedInput
+}
+
+export type GroupCreateWithoutChargesInput = {
+  id?: string
+  name: string
+  totalOwed?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutGroupsInput
+  bills?: Prisma.BillCreateNestedManyWithoutGroupInput
+  members?: Prisma.GroupMemberCreateNestedManyWithoutGroupInput
+  discounts?: Prisma.MemberDiscountCreateNestedManyWithoutGroupInput
+}
+
+export type GroupUncheckedCreateWithoutChargesInput = {
+  id?: string
+  ownerId: string
+  name: string
+  totalOwed?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  bills?: Prisma.BillUncheckedCreateNestedManyWithoutGroupInput
+  members?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutGroupInput
+  discounts?: Prisma.MemberDiscountUncheckedCreateNestedManyWithoutGroupInput
+}
+
+export type GroupCreateOrConnectWithoutChargesInput = {
+  where: Prisma.GroupWhereUniqueInput
+  create: Prisma.XOR<Prisma.GroupCreateWithoutChargesInput, Prisma.GroupUncheckedCreateWithoutChargesInput>
+}
+
+export type GroupUpsertWithoutChargesInput = {
+  update: Prisma.XOR<Prisma.GroupUpdateWithoutChargesInput, Prisma.GroupUncheckedUpdateWithoutChargesInput>
+  create: Prisma.XOR<Prisma.GroupCreateWithoutChargesInput, Prisma.GroupUncheckedCreateWithoutChargesInput>
+  where?: Prisma.GroupWhereInput
+}
+
+export type GroupUpdateToOneWithWhereWithoutChargesInput = {
+  where?: Prisma.GroupWhereInput
+  data: Prisma.XOR<Prisma.GroupUpdateWithoutChargesInput, Prisma.GroupUncheckedUpdateWithoutChargesInput>
+}
+
+export type GroupUpdateWithoutChargesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  totalOwed?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutGroupsNestedInput
+  bills?: Prisma.BillUpdateManyWithoutGroupNestedInput
+  members?: Prisma.GroupMemberUpdateManyWithoutGroupNestedInput
+  discounts?: Prisma.MemberDiscountUpdateManyWithoutGroupNestedInput
+}
+
+export type GroupUncheckedUpdateWithoutChargesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  totalOwed?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bills?: Prisma.BillUncheckedUpdateManyWithoutGroupNestedInput
+  members?: Prisma.GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
+  discounts?: Prisma.MemberDiscountUncheckedUpdateManyWithoutGroupNestedInput
+}
+
+export type GroupCreateWithoutDiscountsInput = {
+  id?: string
+  name: string
+  totalOwed?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutGroupsInput
+  bills?: Prisma.BillCreateNestedManyWithoutGroupInput
+  members?: Prisma.GroupMemberCreateNestedManyWithoutGroupInput
+  charges?: Prisma.GroupChargeCreateNestedManyWithoutGroupInput
+}
+
+export type GroupUncheckedCreateWithoutDiscountsInput = {
+  id?: string
+  ownerId: string
+  name: string
+  totalOwed?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  bills?: Prisma.BillUncheckedCreateNestedManyWithoutGroupInput
+  members?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutGroupInput
+  charges?: Prisma.GroupChargeUncheckedCreateNestedManyWithoutGroupInput
+}
+
+export type GroupCreateOrConnectWithoutDiscountsInput = {
+  where: Prisma.GroupWhereUniqueInput
+  create: Prisma.XOR<Prisma.GroupCreateWithoutDiscountsInput, Prisma.GroupUncheckedCreateWithoutDiscountsInput>
+}
+
+export type GroupUpsertWithoutDiscountsInput = {
+  update: Prisma.XOR<Prisma.GroupUpdateWithoutDiscountsInput, Prisma.GroupUncheckedUpdateWithoutDiscountsInput>
+  create: Prisma.XOR<Prisma.GroupCreateWithoutDiscountsInput, Prisma.GroupUncheckedCreateWithoutDiscountsInput>
+  where?: Prisma.GroupWhereInput
+}
+
+export type GroupUpdateToOneWithWhereWithoutDiscountsInput = {
+  where?: Prisma.GroupWhereInput
+  data: Prisma.XOR<Prisma.GroupUpdateWithoutDiscountsInput, Prisma.GroupUncheckedUpdateWithoutDiscountsInput>
+}
+
+export type GroupUpdateWithoutDiscountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  totalOwed?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutGroupsNestedInput
+  bills?: Prisma.BillUpdateManyWithoutGroupNestedInput
+  members?: Prisma.GroupMemberUpdateManyWithoutGroupNestedInput
+  charges?: Prisma.GroupChargeUpdateManyWithoutGroupNestedInput
+}
+
+export type GroupUncheckedUpdateWithoutDiscountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  totalOwed?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bills?: Prisma.BillUncheckedUpdateManyWithoutGroupNestedInput
+  members?: Prisma.GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
+  charges?: Prisma.GroupChargeUncheckedUpdateManyWithoutGroupNestedInput
 }
 
 export type GroupCreateWithoutBillsInput = {
   id?: string
   name: string
+  totalOwed?: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutGroupsInput
+  members?: Prisma.GroupMemberCreateNestedManyWithoutGroupInput
+  charges?: Prisma.GroupChargeCreateNestedManyWithoutGroupInput
+  discounts?: Prisma.MemberDiscountCreateNestedManyWithoutGroupInput
 }
 
 export type GroupUncheckedCreateWithoutBillsInput = {
   id?: string
   ownerId: string
   name: string
+  totalOwed?: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
+  members?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutGroupInput
+  charges?: Prisma.GroupChargeUncheckedCreateNestedManyWithoutGroupInput
+  discounts?: Prisma.MemberDiscountUncheckedCreateNestedManyWithoutGroupInput
 }
 
 export type GroupCreateOrConnectWithoutBillsInput = {
@@ -446,40 +780,58 @@ export type GroupUpdateToOneWithWhereWithoutBillsInput = {
 export type GroupUpdateWithoutBillsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  totalOwed?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutGroupsNestedInput
+  members?: Prisma.GroupMemberUpdateManyWithoutGroupNestedInput
+  charges?: Prisma.GroupChargeUpdateManyWithoutGroupNestedInput
+  discounts?: Prisma.MemberDiscountUpdateManyWithoutGroupNestedInput
 }
 
 export type GroupUncheckedUpdateWithoutBillsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  totalOwed?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
+  charges?: Prisma.GroupChargeUncheckedUpdateManyWithoutGroupNestedInput
+  discounts?: Prisma.MemberDiscountUncheckedUpdateManyWithoutGroupNestedInput
 }
 
 export type GroupCreateManyOwnerInput = {
   id?: string
   name: string
+  totalOwed?: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
 }
 
 export type GroupUpdateWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  totalOwed?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bills?: Prisma.BillUpdateManyWithoutGroupNestedInput
+  members?: Prisma.GroupMemberUpdateManyWithoutGroupNestedInput
+  charges?: Prisma.GroupChargeUpdateManyWithoutGroupNestedInput
+  discounts?: Prisma.MemberDiscountUpdateManyWithoutGroupNestedInput
 }
 
 export type GroupUncheckedUpdateWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  totalOwed?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bills?: Prisma.BillUncheckedUpdateManyWithoutGroupNestedInput
+  members?: Prisma.GroupMemberUncheckedUpdateManyWithoutGroupNestedInput
+  charges?: Prisma.GroupChargeUncheckedUpdateManyWithoutGroupNestedInput
+  discounts?: Prisma.MemberDiscountUncheckedUpdateManyWithoutGroupNestedInput
 }
 
 export type GroupUncheckedUpdateManyWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  totalOwed?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -490,10 +842,16 @@ export type GroupUncheckedUpdateManyWithoutOwnerInput = {
 
 export type GroupCountOutputType = {
   bills: number
+  members: number
+  charges: number
+  discounts: number
 }
 
 export type GroupCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   bills?: boolean | GroupCountOutputTypeCountBillsArgs
+  members?: boolean | GroupCountOutputTypeCountMembersArgs
+  charges?: boolean | GroupCountOutputTypeCountChargesArgs
+  discounts?: boolean | GroupCountOutputTypeCountDiscountsArgs
 }
 
 /**
@@ -513,14 +871,39 @@ export type GroupCountOutputTypeCountBillsArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.BillWhereInput
 }
 
+/**
+ * GroupCountOutputType without action
+ */
+export type GroupCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GroupMemberWhereInput
+}
+
+/**
+ * GroupCountOutputType without action
+ */
+export type GroupCountOutputTypeCountChargesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GroupChargeWhereInput
+}
+
+/**
+ * GroupCountOutputType without action
+ */
+export type GroupCountOutputTypeCountDiscountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MemberDiscountWhereInput
+}
+
 
 export type GroupSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   ownerId?: boolean
   name?: boolean
+  totalOwed?: boolean
   createdAt?: boolean
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   bills?: boolean | Prisma.Group$billsArgs<ExtArgs>
+  members?: boolean | Prisma.Group$membersArgs<ExtArgs>
+  charges?: boolean | Prisma.Group$chargesArgs<ExtArgs>
+  discounts?: boolean | Prisma.Group$discountsArgs<ExtArgs>
   _count?: boolean | Prisma.GroupCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["group"]>
 
@@ -528,6 +911,7 @@ export type GroupSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   ownerId?: boolean
   name?: boolean
+  totalOwed?: boolean
   createdAt?: boolean
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["group"]>
@@ -536,6 +920,7 @@ export type GroupSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   ownerId?: boolean
   name?: boolean
+  totalOwed?: boolean
   createdAt?: boolean
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["group"]>
@@ -544,13 +929,17 @@ export type GroupSelectScalar = {
   id?: boolean
   ownerId?: boolean
   name?: boolean
+  totalOwed?: boolean
   createdAt?: boolean
 }
 
-export type GroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "name" | "createdAt", ExtArgs["result"]["group"]>
+export type GroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "name" | "totalOwed" | "createdAt", ExtArgs["result"]["group"]>
 export type GroupInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   bills?: boolean | Prisma.Group$billsArgs<ExtArgs>
+  members?: boolean | Prisma.Group$membersArgs<ExtArgs>
+  charges?: boolean | Prisma.Group$chargesArgs<ExtArgs>
+  discounts?: boolean | Prisma.Group$discountsArgs<ExtArgs>
   _count?: boolean | Prisma.GroupCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type GroupIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -565,11 +954,15 @@ export type $GroupPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     owner: Prisma.$UserPayload<ExtArgs>
     bills: Prisma.$BillPayload<ExtArgs>[]
+    members: Prisma.$GroupMemberPayload<ExtArgs>[]
+    charges: Prisma.$GroupChargePayload<ExtArgs>[]
+    discounts: Prisma.$MemberDiscountPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     ownerId: string
     name: string
+    totalOwed: runtime.Decimal
     createdAt: Date
   }, ExtArgs["result"]["group"]>
   composites: {}
@@ -967,6 +1360,9 @@ export interface Prisma__GroupClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   bills<T extends Prisma.Group$billsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Group$billsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  members<T extends Prisma.Group$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Group$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  charges<T extends Prisma.Group$chargesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Group$chargesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupChargePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  discounts<T extends Prisma.Group$discountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Group$discountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MemberDiscountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -999,6 +1395,7 @@ export interface GroupFieldRefs {
   readonly id: Prisma.FieldRef<"Group", 'String'>
   readonly ownerId: Prisma.FieldRef<"Group", 'String'>
   readonly name: Prisma.FieldRef<"Group", 'String'>
+  readonly totalOwed: Prisma.FieldRef<"Group", 'Decimal'>
   readonly createdAt: Prisma.FieldRef<"Group", 'DateTime'>
 }
     
@@ -1422,6 +1819,78 @@ export type Group$billsArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.BillScalarFieldEnum | Prisma.BillScalarFieldEnum[]
+}
+
+/**
+ * Group.members
+ */
+export type Group$membersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GroupMember
+   */
+  select?: Prisma.GroupMemberSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GroupMember
+   */
+  omit?: Prisma.GroupMemberOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GroupMemberInclude<ExtArgs> | null
+  where?: Prisma.GroupMemberWhereInput
+  orderBy?: Prisma.GroupMemberOrderByWithRelationInput | Prisma.GroupMemberOrderByWithRelationInput[]
+  cursor?: Prisma.GroupMemberWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GroupMemberScalarFieldEnum | Prisma.GroupMemberScalarFieldEnum[]
+}
+
+/**
+ * Group.charges
+ */
+export type Group$chargesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GroupCharge
+   */
+  select?: Prisma.GroupChargeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GroupCharge
+   */
+  omit?: Prisma.GroupChargeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GroupChargeInclude<ExtArgs> | null
+  where?: Prisma.GroupChargeWhereInput
+  orderBy?: Prisma.GroupChargeOrderByWithRelationInput | Prisma.GroupChargeOrderByWithRelationInput[]
+  cursor?: Prisma.GroupChargeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GroupChargeScalarFieldEnum | Prisma.GroupChargeScalarFieldEnum[]
+}
+
+/**
+ * Group.discounts
+ */
+export type Group$discountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MemberDiscount
+   */
+  select?: Prisma.MemberDiscountSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MemberDiscount
+   */
+  omit?: Prisma.MemberDiscountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MemberDiscountInclude<ExtArgs> | null
+  where?: Prisma.MemberDiscountWhereInput
+  orderBy?: Prisma.MemberDiscountOrderByWithRelationInput | Prisma.MemberDiscountOrderByWithRelationInput[]
+  cursor?: Prisma.MemberDiscountWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MemberDiscountScalarFieldEnum | Prisma.MemberDiscountScalarFieldEnum[]
 }
 
 /**

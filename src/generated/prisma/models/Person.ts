@@ -184,6 +184,8 @@ export type PersonWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Person"> | Date | string
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   bills?: Prisma.BillListRelationFilter
+  groupMemberships?: Prisma.GroupMemberListRelationFilter
+  discounts?: Prisma.MemberDiscountListRelationFilter
 }
 
 export type PersonOrderByWithRelationInput = {
@@ -194,6 +196,8 @@ export type PersonOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   owner?: Prisma.UserOrderByWithRelationInput
   bills?: Prisma.BillOrderByRelationAggregateInput
+  groupMemberships?: Prisma.GroupMemberOrderByRelationAggregateInput
+  discounts?: Prisma.MemberDiscountOrderByRelationAggregateInput
 }
 
 export type PersonWhereUniqueInput = Prisma.AtLeast<{
@@ -207,6 +211,8 @@ export type PersonWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Person"> | Date | string
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   bills?: Prisma.BillListRelationFilter
+  groupMemberships?: Prisma.GroupMemberListRelationFilter
+  discounts?: Prisma.MemberDiscountListRelationFilter
 }, "id">
 
 export type PersonOrderByWithAggregationInput = {
@@ -238,6 +244,8 @@ export type PersonCreateInput = {
   createdAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutPeopleInput
   bills?: Prisma.BillCreateNestedManyWithoutPersonInput
+  groupMemberships?: Prisma.GroupMemberCreateNestedManyWithoutPersonInput
+  discounts?: Prisma.MemberDiscountCreateNestedManyWithoutPersonInput
 }
 
 export type PersonUncheckedCreateInput = {
@@ -247,6 +255,8 @@ export type PersonUncheckedCreateInput = {
   profileImageUrl?: string | null
   createdAt?: Date | string
   bills?: Prisma.BillUncheckedCreateNestedManyWithoutPersonInput
+  groupMemberships?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutPersonInput
+  discounts?: Prisma.MemberDiscountUncheckedCreateNestedManyWithoutPersonInput
 }
 
 export type PersonUpdateInput = {
@@ -256,6 +266,8 @@ export type PersonUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutPeopleNestedInput
   bills?: Prisma.BillUpdateManyWithoutPersonNestedInput
+  groupMemberships?: Prisma.GroupMemberUpdateManyWithoutPersonNestedInput
+  discounts?: Prisma.MemberDiscountUpdateManyWithoutPersonNestedInput
 }
 
 export type PersonUncheckedUpdateInput = {
@@ -265,6 +277,8 @@ export type PersonUncheckedUpdateInput = {
   profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bills?: Prisma.BillUncheckedUpdateManyWithoutPersonNestedInput
+  groupMemberships?: Prisma.GroupMemberUncheckedUpdateManyWithoutPersonNestedInput
+  discounts?: Prisma.MemberDiscountUncheckedUpdateManyWithoutPersonNestedInput
 }
 
 export type PersonCreateManyInput = {
@@ -375,6 +389,34 @@ export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
+export type PersonCreateNestedOneWithoutGroupMembershipsInput = {
+  create?: Prisma.XOR<Prisma.PersonCreateWithoutGroupMembershipsInput, Prisma.PersonUncheckedCreateWithoutGroupMembershipsInput>
+  connectOrCreate?: Prisma.PersonCreateOrConnectWithoutGroupMembershipsInput
+  connect?: Prisma.PersonWhereUniqueInput
+}
+
+export type PersonUpdateOneRequiredWithoutGroupMembershipsNestedInput = {
+  create?: Prisma.XOR<Prisma.PersonCreateWithoutGroupMembershipsInput, Prisma.PersonUncheckedCreateWithoutGroupMembershipsInput>
+  connectOrCreate?: Prisma.PersonCreateOrConnectWithoutGroupMembershipsInput
+  upsert?: Prisma.PersonUpsertWithoutGroupMembershipsInput
+  connect?: Prisma.PersonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PersonUpdateToOneWithWhereWithoutGroupMembershipsInput, Prisma.PersonUpdateWithoutGroupMembershipsInput>, Prisma.PersonUncheckedUpdateWithoutGroupMembershipsInput>
+}
+
+export type PersonCreateNestedOneWithoutDiscountsInput = {
+  create?: Prisma.XOR<Prisma.PersonCreateWithoutDiscountsInput, Prisma.PersonUncheckedCreateWithoutDiscountsInput>
+  connectOrCreate?: Prisma.PersonCreateOrConnectWithoutDiscountsInput
+  connect?: Prisma.PersonWhereUniqueInput
+}
+
+export type PersonUpdateOneRequiredWithoutDiscountsNestedInput = {
+  create?: Prisma.XOR<Prisma.PersonCreateWithoutDiscountsInput, Prisma.PersonUncheckedCreateWithoutDiscountsInput>
+  connectOrCreate?: Prisma.PersonCreateOrConnectWithoutDiscountsInput
+  upsert?: Prisma.PersonUpsertWithoutDiscountsInput
+  connect?: Prisma.PersonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PersonUpdateToOneWithWhereWithoutDiscountsInput, Prisma.PersonUpdateWithoutDiscountsInput>, Prisma.PersonUncheckedUpdateWithoutDiscountsInput>
+}
+
 export type PersonCreateNestedOneWithoutBillsInput = {
   create?: Prisma.XOR<Prisma.PersonCreateWithoutBillsInput, Prisma.PersonUncheckedCreateWithoutBillsInput>
   connectOrCreate?: Prisma.PersonCreateOrConnectWithoutBillsInput
@@ -395,6 +437,8 @@ export type PersonCreateWithoutOwnerInput = {
   profileImageUrl?: string | null
   createdAt?: Date | string
   bills?: Prisma.BillCreateNestedManyWithoutPersonInput
+  groupMemberships?: Prisma.GroupMemberCreateNestedManyWithoutPersonInput
+  discounts?: Prisma.MemberDiscountCreateNestedManyWithoutPersonInput
 }
 
 export type PersonUncheckedCreateWithoutOwnerInput = {
@@ -403,6 +447,8 @@ export type PersonUncheckedCreateWithoutOwnerInput = {
   profileImageUrl?: string | null
   createdAt?: Date | string
   bills?: Prisma.BillUncheckedCreateNestedManyWithoutPersonInput
+  groupMemberships?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutPersonInput
+  discounts?: Prisma.MemberDiscountUncheckedCreateNestedManyWithoutPersonInput
 }
 
 export type PersonCreateOrConnectWithoutOwnerInput = {
@@ -442,12 +488,126 @@ export type PersonScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Person"> | Date | string
 }
 
+export type PersonCreateWithoutGroupMembershipsInput = {
+  id?: string
+  name: string
+  profileImageUrl?: string | null
+  createdAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutPeopleInput
+  bills?: Prisma.BillCreateNestedManyWithoutPersonInput
+  discounts?: Prisma.MemberDiscountCreateNestedManyWithoutPersonInput
+}
+
+export type PersonUncheckedCreateWithoutGroupMembershipsInput = {
+  id?: string
+  ownerId: string
+  name: string
+  profileImageUrl?: string | null
+  createdAt?: Date | string
+  bills?: Prisma.BillUncheckedCreateNestedManyWithoutPersonInput
+  discounts?: Prisma.MemberDiscountUncheckedCreateNestedManyWithoutPersonInput
+}
+
+export type PersonCreateOrConnectWithoutGroupMembershipsInput = {
+  where: Prisma.PersonWhereUniqueInput
+  create: Prisma.XOR<Prisma.PersonCreateWithoutGroupMembershipsInput, Prisma.PersonUncheckedCreateWithoutGroupMembershipsInput>
+}
+
+export type PersonUpsertWithoutGroupMembershipsInput = {
+  update: Prisma.XOR<Prisma.PersonUpdateWithoutGroupMembershipsInput, Prisma.PersonUncheckedUpdateWithoutGroupMembershipsInput>
+  create: Prisma.XOR<Prisma.PersonCreateWithoutGroupMembershipsInput, Prisma.PersonUncheckedCreateWithoutGroupMembershipsInput>
+  where?: Prisma.PersonWhereInput
+}
+
+export type PersonUpdateToOneWithWhereWithoutGroupMembershipsInput = {
+  where?: Prisma.PersonWhereInput
+  data: Prisma.XOR<Prisma.PersonUpdateWithoutGroupMembershipsInput, Prisma.PersonUncheckedUpdateWithoutGroupMembershipsInput>
+}
+
+export type PersonUpdateWithoutGroupMembershipsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutPeopleNestedInput
+  bills?: Prisma.BillUpdateManyWithoutPersonNestedInput
+  discounts?: Prisma.MemberDiscountUpdateManyWithoutPersonNestedInput
+}
+
+export type PersonUncheckedUpdateWithoutGroupMembershipsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bills?: Prisma.BillUncheckedUpdateManyWithoutPersonNestedInput
+  discounts?: Prisma.MemberDiscountUncheckedUpdateManyWithoutPersonNestedInput
+}
+
+export type PersonCreateWithoutDiscountsInput = {
+  id?: string
+  name: string
+  profileImageUrl?: string | null
+  createdAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutPeopleInput
+  bills?: Prisma.BillCreateNestedManyWithoutPersonInput
+  groupMemberships?: Prisma.GroupMemberCreateNestedManyWithoutPersonInput
+}
+
+export type PersonUncheckedCreateWithoutDiscountsInput = {
+  id?: string
+  ownerId: string
+  name: string
+  profileImageUrl?: string | null
+  createdAt?: Date | string
+  bills?: Prisma.BillUncheckedCreateNestedManyWithoutPersonInput
+  groupMemberships?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutPersonInput
+}
+
+export type PersonCreateOrConnectWithoutDiscountsInput = {
+  where: Prisma.PersonWhereUniqueInput
+  create: Prisma.XOR<Prisma.PersonCreateWithoutDiscountsInput, Prisma.PersonUncheckedCreateWithoutDiscountsInput>
+}
+
+export type PersonUpsertWithoutDiscountsInput = {
+  update: Prisma.XOR<Prisma.PersonUpdateWithoutDiscountsInput, Prisma.PersonUncheckedUpdateWithoutDiscountsInput>
+  create: Prisma.XOR<Prisma.PersonCreateWithoutDiscountsInput, Prisma.PersonUncheckedCreateWithoutDiscountsInput>
+  where?: Prisma.PersonWhereInput
+}
+
+export type PersonUpdateToOneWithWhereWithoutDiscountsInput = {
+  where?: Prisma.PersonWhereInput
+  data: Prisma.XOR<Prisma.PersonUpdateWithoutDiscountsInput, Prisma.PersonUncheckedUpdateWithoutDiscountsInput>
+}
+
+export type PersonUpdateWithoutDiscountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutPeopleNestedInput
+  bills?: Prisma.BillUpdateManyWithoutPersonNestedInput
+  groupMemberships?: Prisma.GroupMemberUpdateManyWithoutPersonNestedInput
+}
+
+export type PersonUncheckedUpdateWithoutDiscountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bills?: Prisma.BillUncheckedUpdateManyWithoutPersonNestedInput
+  groupMemberships?: Prisma.GroupMemberUncheckedUpdateManyWithoutPersonNestedInput
+}
+
 export type PersonCreateWithoutBillsInput = {
   id?: string
   name: string
   profileImageUrl?: string | null
   createdAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutPeopleInput
+  groupMemberships?: Prisma.GroupMemberCreateNestedManyWithoutPersonInput
+  discounts?: Prisma.MemberDiscountCreateNestedManyWithoutPersonInput
 }
 
 export type PersonUncheckedCreateWithoutBillsInput = {
@@ -456,6 +616,8 @@ export type PersonUncheckedCreateWithoutBillsInput = {
   name: string
   profileImageUrl?: string | null
   createdAt?: Date | string
+  groupMemberships?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutPersonInput
+  discounts?: Prisma.MemberDiscountUncheckedCreateNestedManyWithoutPersonInput
 }
 
 export type PersonCreateOrConnectWithoutBillsInput = {
@@ -480,6 +642,8 @@ export type PersonUpdateWithoutBillsInput = {
   profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutPeopleNestedInput
+  groupMemberships?: Prisma.GroupMemberUpdateManyWithoutPersonNestedInput
+  discounts?: Prisma.MemberDiscountUpdateManyWithoutPersonNestedInput
 }
 
 export type PersonUncheckedUpdateWithoutBillsInput = {
@@ -488,6 +652,8 @@ export type PersonUncheckedUpdateWithoutBillsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  groupMemberships?: Prisma.GroupMemberUncheckedUpdateManyWithoutPersonNestedInput
+  discounts?: Prisma.MemberDiscountUncheckedUpdateManyWithoutPersonNestedInput
 }
 
 export type PersonCreateManyOwnerInput = {
@@ -503,6 +669,8 @@ export type PersonUpdateWithoutOwnerInput = {
   profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bills?: Prisma.BillUpdateManyWithoutPersonNestedInput
+  groupMemberships?: Prisma.GroupMemberUpdateManyWithoutPersonNestedInput
+  discounts?: Prisma.MemberDiscountUpdateManyWithoutPersonNestedInput
 }
 
 export type PersonUncheckedUpdateWithoutOwnerInput = {
@@ -511,6 +679,8 @@ export type PersonUncheckedUpdateWithoutOwnerInput = {
   profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bills?: Prisma.BillUncheckedUpdateManyWithoutPersonNestedInput
+  groupMemberships?: Prisma.GroupMemberUncheckedUpdateManyWithoutPersonNestedInput
+  discounts?: Prisma.MemberDiscountUncheckedUpdateManyWithoutPersonNestedInput
 }
 
 export type PersonUncheckedUpdateManyWithoutOwnerInput = {
@@ -527,10 +697,14 @@ export type PersonUncheckedUpdateManyWithoutOwnerInput = {
 
 export type PersonCountOutputType = {
   bills: number
+  groupMemberships: number
+  discounts: number
 }
 
 export type PersonCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   bills?: boolean | PersonCountOutputTypeCountBillsArgs
+  groupMemberships?: boolean | PersonCountOutputTypeCountGroupMembershipsArgs
+  discounts?: boolean | PersonCountOutputTypeCountDiscountsArgs
 }
 
 /**
@@ -550,6 +724,20 @@ export type PersonCountOutputTypeCountBillsArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.BillWhereInput
 }
 
+/**
+ * PersonCountOutputType without action
+ */
+export type PersonCountOutputTypeCountGroupMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GroupMemberWhereInput
+}
+
+/**
+ * PersonCountOutputType without action
+ */
+export type PersonCountOutputTypeCountDiscountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MemberDiscountWhereInput
+}
+
 
 export type PersonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -559,6 +747,8 @@ export type PersonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   createdAt?: boolean
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   bills?: boolean | Prisma.Person$billsArgs<ExtArgs>
+  groupMemberships?: boolean | Prisma.Person$groupMembershipsArgs<ExtArgs>
+  discounts?: boolean | Prisma.Person$discountsArgs<ExtArgs>
   _count?: boolean | Prisma.PersonCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["person"]>
 
@@ -592,6 +782,8 @@ export type PersonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type PersonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   bills?: boolean | Prisma.Person$billsArgs<ExtArgs>
+  groupMemberships?: boolean | Prisma.Person$groupMembershipsArgs<ExtArgs>
+  discounts?: boolean | Prisma.Person$discountsArgs<ExtArgs>
   _count?: boolean | Prisma.PersonCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PersonIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -606,6 +798,8 @@ export type $PersonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     owner: Prisma.$UserPayload<ExtArgs>
     bills: Prisma.$BillPayload<ExtArgs>[]
+    groupMemberships: Prisma.$GroupMemberPayload<ExtArgs>[]
+    discounts: Prisma.$MemberDiscountPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1009,6 +1203,8 @@ export interface Prisma__PersonClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   bills<T extends Prisma.Person$billsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Person$billsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  groupMemberships<T extends Prisma.Person$groupMembershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Person$groupMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  discounts<T extends Prisma.Person$discountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Person$discountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MemberDiscountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1465,6 +1661,54 @@ export type Person$billsArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.BillScalarFieldEnum | Prisma.BillScalarFieldEnum[]
+}
+
+/**
+ * Person.groupMemberships
+ */
+export type Person$groupMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GroupMember
+   */
+  select?: Prisma.GroupMemberSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GroupMember
+   */
+  omit?: Prisma.GroupMemberOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GroupMemberInclude<ExtArgs> | null
+  where?: Prisma.GroupMemberWhereInput
+  orderBy?: Prisma.GroupMemberOrderByWithRelationInput | Prisma.GroupMemberOrderByWithRelationInput[]
+  cursor?: Prisma.GroupMemberWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GroupMemberScalarFieldEnum | Prisma.GroupMemberScalarFieldEnum[]
+}
+
+/**
+ * Person.discounts
+ */
+export type Person$discountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MemberDiscount
+   */
+  select?: Prisma.MemberDiscountSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MemberDiscount
+   */
+  omit?: Prisma.MemberDiscountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MemberDiscountInclude<ExtArgs> | null
+  where?: Prisma.MemberDiscountWhereInput
+  orderBy?: Prisma.MemberDiscountOrderByWithRelationInput | Prisma.MemberDiscountOrderByWithRelationInput[]
+  cursor?: Prisma.MemberDiscountWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MemberDiscountScalarFieldEnum | Prisma.MemberDiscountScalarFieldEnum[]
 }
 
 /**
