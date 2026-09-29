@@ -22,6 +22,47 @@ import type {
   UpdateBillDto,
 } from './dto/debt.dto.js';
 
+type PersonRow = {
+  id: string;
+  ownerId: string;
+  name: string;
+  profileImageUrl: string | null;
+  createdAt: Date;
+};
+type BillRow = {
+  id: string;
+  groupId: string;
+  personId: string;
+  amount: { toString(): string };
+  description: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  person: PersonRow;
+};
+type GroupMemberRow = {
+  personId: string;
+  balance: { toString(): string };
+  paymentStatus: string;
+  person: PersonRow;
+};
+type GroupChargeRow = {
+  id: string;
+  groupId: string;
+  amountPerPerson: { toString(): string };
+  description: string | null;
+  createdBy: string | null;
+  createdAt: Date;
+};
+type MemberDiscountRow = {
+  id: string;
+  groupId: string;
+  personId: string;
+  amount: { toString(): string };
+  description: string | null;
+  createdBy: string | null;
+  createdAt: Date;
+};
+
 @Injectable()
 export class DebtService {
   constructor(private readonly database: PrismaService) {}
@@ -65,13 +106,18 @@ export class DebtService {
     );
   }
   async listGroups(ownerId: string) {
-    return Promise.all(
-      (
-        await this.database.client.group.findMany({
-          where: { ownerId },
-          orderBy: { createdAt: 'asc' },
-        })
-      ).map((row) => this.groupDetail(this.group(row))),
+    const groups = await this.database.client.group.findMany({
+      where: { ownerId },
+      orderBy: { createdAt: 'asc' },
+      include: {
+        bills: { include: { person: true }, orderBy: { createdAt: 'asc' } },
+        members: { include: { person: true }, orderBy: { createdAt: 'asc' } },
+        charges: { orderBy: { createdAt: 'asc' } },
+        discounts: { orderBy: { createdAt: 'asc' } },
+      },
+    });
+    return groups.map(({ bills, members, charges, discounts, ...group }) =>
+      this.groupDetailFromRows(this.group(group), bills, members, charges, discounts),
     );
   }
   async getGroup(ownerId: string, id: string) {
@@ -291,6 +337,15 @@ export class DebtService {
         orderBy: { createdAt: 'asc' },
       }),
     ]);
+    return this.groupDetailFromRows(group, rows, memberRows, chargeRows, discountRows);
+  }
+  private groupDetailFromRows(
+    group: Group,
+    rows: BillRow[],
+    memberRows: GroupMemberRow[],
+    chargeRows: GroupChargeRow[],
+    discountRows: MemberDiscountRow[],
+  ) {
     const bills = rows.map((row) => this.bill(row));
     const members = new Map<
       string,

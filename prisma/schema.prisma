@@ -66,6 +66,7 @@ model GroupMember {
 
   @@unique([groupId, personId])
   @@index([personId])
+  @@index([groupId, createdAt])
   @@map("group_members")
 }
 
@@ -79,6 +80,7 @@ model GroupCharge {
   group           Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
   @@index([groupId])
+  @@index([groupId, createdAt])
   @@map("group_charges")
 }
 
@@ -94,6 +96,7 @@ model MemberDiscount {
   person      Person   @relation(fields: [personId], references: [id], onDelete: Restrict)
 
   @@index([groupId])
+  @@index([groupId, createdAt])
   @@index([personId])
   @@map("member_discounts")
 }
@@ -110,6 +113,7 @@ model Bill {
   person      Person   @relation(fields: [personId], references: [id], onDelete: Restrict)
 
   @@index([groupId])
+  @@index([groupId, createdAt])
   @@index([personId])
   @@map("bills")
 }
