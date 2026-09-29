@@ -11,7 +11,8 @@ export interface CreateGroupDto {
 export interface AddGroupMemberDto { personId: string; }
 
 export interface CreateGroupChargeDto {
-  amountPerPerson: number;
+  /** The full shared expense; the service splits it equally between members. */
+  totalAmount: number;
   description?: string;
   createdBy?: string;
 }

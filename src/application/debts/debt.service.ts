@@ -242,10 +242,6 @@ export class DebtService {
     groupId: string,
     input: CreateGroupChargeDto,
   ): Promise<GroupCharge> {
-    const amountPerPerson = this.amount(
-      input.amountPerPerson,
-      'amountPerPerson',
-    );
     const description =
       input.description === undefined
         ? undefined
@@ -264,6 +260,10 @@ export class DebtService {
         throw new BadRequestException(
           'Group must have at least one member before adding a charge',
         );
+      const totalAmount = this.amount(input.totalAmount, 'totalAmount');
+      // Currency is stored to two decimals; any unavoidable one-satang remainder
+      // is retained in the group total rather than overcharging a member.
+      const amountPerPerson = Math.floor((totalAmount / group.members.length) * 100) / 100;
       const charge = await tx.groupCharge.create({
         data: {
           id: randomUUID(),

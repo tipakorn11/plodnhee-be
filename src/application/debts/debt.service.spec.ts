@@ -12,7 +12,7 @@ describe('DebtService.createGroupCharge', () => {
     const database = { client: { $transaction: vi.fn(async (callback: (client: typeof tx) => unknown) => callback(tx)) } };
     const service = new DebtService(database as never);
 
-    await expect(service.createGroupCharge('user-1', 'group-1', { amountPerPerson: 25, description: 'Lunch', createdBy: 'user-1' })).resolves.toMatchObject({ id: 'charge-1', amountPerPerson: 25 });
+    await expect(service.createGroupCharge('user-1', 'group-1', { totalAmount: 50, description: 'Lunch', createdBy: 'user-1' })).resolves.toMatchObject({ id: 'charge-1', amountPerPerson: 25 });
 
     expect(database.client.$transaction).toHaveBeenCalledOnce();
     expect(tx.groupCharge.create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ groupId: 'group-1', amountPerPerson: 25 }) }));
@@ -25,7 +25,7 @@ describe('DebtService.createGroupCharge', () => {
     const database = { client: { $transaction: vi.fn(async (callback: (client: typeof tx) => unknown) => callback(tx)) } };
     const service = new DebtService(database as never);
 
-    await expect(service.createGroupCharge('user-1', 'group-1', { amountPerPerson: 25 })).rejects.toBeInstanceOf(BadRequestException);
+    await expect(service.createGroupCharge('user-1', 'group-1', { totalAmount: 50 })).rejects.toBeInstanceOf(BadRequestException);
   });
 
   it('does not authorize a charge for a group the caller cannot edit', async () => {
@@ -33,6 +33,6 @@ describe('DebtService.createGroupCharge', () => {
     const database = { client: { $transaction: vi.fn(async (callback: (client: typeof tx) => unknown) => callback(tx)) } };
     const service = new DebtService(database as never);
 
-    await expect(service.createGroupCharge('other-user', 'group-1', { amountPerPerson: 25 })).rejects.toBeInstanceOf(NotFoundException);
+    await expect(service.createGroupCharge('other-user', 'group-1', { totalAmount: 50 })).rejects.toBeInstanceOf(NotFoundException);
   });
 });
