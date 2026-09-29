@@ -3,11 +3,11 @@ import { describe, expect, it, vi } from 'vitest';
 import { DebtService } from './debt.service.js';
 
 describe('DebtService.createGroupCharge', () => {
-  it('writes the charge, every member balance/status, and group total in one transaction', async () => {
+  it('writes one payable bill for every member and the group total in one transaction', async () => {
     const tx = {
-      group: { findFirst: vi.fn().mockResolvedValue({ id: 'group-1', members: [{ id: 'member-1' }, { id: 'member-2' }] }), update: vi.fn().mockResolvedValue({}) },
+      group: { findFirst: vi.fn().mockResolvedValue({ id: 'group-1', members: [{ personId: 'person-1' }, { personId: 'person-2' }] }), update: vi.fn().mockResolvedValue({}) },
       groupCharge: { create: vi.fn().mockResolvedValue({ id: 'charge-1', groupId: 'group-1', amountPerPerson: 25, description: 'Lunch', createdBy: 'user-1', createdAt: new Date() }) },
-      groupMember: { updateMany: vi.fn().mockResolvedValue({ count: 2 }) },
+      bill: { createMany: vi.fn().mockResolvedValue({ count: 2 }) },
     };
     const database = { client: { $transaction: vi.fn(async (callback: (client: typeof tx) => unknown) => callback(tx)) } };
     const service = new DebtService(database as never);
@@ -16,7 +16,7 @@ describe('DebtService.createGroupCharge', () => {
 
     expect(database.client.$transaction).toHaveBeenCalledOnce();
     expect(tx.groupCharge.create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ groupId: 'group-1', amountPerPerson: 25 }) }));
-    expect(tx.groupMember.updateMany).toHaveBeenCalledWith({ where: { groupId: 'group-1' }, data: { balance: { increment: 25 }, paymentStatus: 'PENDING' } });
+    expect(tx.bill.createMany).toHaveBeenCalledWith(expect.objectContaining({ data: expect.arrayContaining([expect.objectContaining({ groupId: 'group-1', personId: 'person-1', amount: 25 })]) }));
     expect(tx.group.update).toHaveBeenCalledWith({ where: { id: 'group-1' }, data: { totalOwed: { increment: 50 } } });
   });
 

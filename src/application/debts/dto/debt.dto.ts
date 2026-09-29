@@ -32,3 +32,9 @@ export interface UpdateBillDto {
   amount?: number;
   description?: string;
 }
+
+export interface PayBillsDto {
+  /** `one` requires billId; `all` clears every currently unpaid bill. */
+  scope: 'one' | 'all';
+  billId?: string;
+}

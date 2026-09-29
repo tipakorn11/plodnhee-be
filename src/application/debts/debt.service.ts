@@ -19,6 +19,7 @@ import type {
   CreateGroupDto,
   CreateMemberDiscountDto,
   CreatePersonDto,
+  PayBillsDto,
   UpdateBillDto,
 } from './dto/debt.dto.js';
 
@@ -31,12 +32,14 @@ type PersonRow = {
 };
 type BillRow = {
   id: string;
-  groupId: string;
+  groupId: string | null;
   personId: string;
   amount: { toString(): string };
   description: string | null;
   createdAt: Date;
   updatedAt: Date;
+  paymentStatus: string;
+  paidAt: Date | null;
   person: PersonRow;
 };
 type GroupMemberRow = {
@@ -79,12 +82,16 @@ export class DebtService {
     return this.person(row);
   }
   async listPeople(ownerId: string): Promise<Person[]> {
-    return (
-      await this.database.client.person.findMany({
-        where: { ownerId },
-        orderBy: { createdAt: 'asc' },
-      })
-    ).map((row) => this.person(row));
+    const rows = await this.database.client.person.findMany({
+      where: { ownerId }, orderBy: { createdAt: 'asc' },
+      include: { bills: { where: { groupId: null, paymentStatus: 'PENDING' } } },
+    });
+    return rows.map((row) => ({
+      ...this.person(row),
+      personalTotalOwed: row.bills.reduce((sum, bill) => sum + Number(bill.amount), 0),
+      personalBillCount: row.bills.length,
+      personalBills: row.bills.map((bill) => this.bill(bill)),
+    }));
   }
   async createGroup(ownerId: string, input: CreateGroupDto): Promise<Group> {
     const memberIds = this.memberIds(input.memberIds);
@@ -158,6 +165,20 @@ export class DebtService {
       });
       return this.bill(bill);
     });
+  }
+  async createPersonalBill(
+    ownerId: string,
+    personId: string,
+    input: Omit<CreateBillDto, 'personId'>,
+  ): Promise<Bill> {
+    await this.assertPeopleOwned(ownerId, [this.personId(personId)]);
+    const bill = await this.database.client.bill.create({
+      data: {
+        id: randomUUID(), personId, amount: this.amount(input.amount),
+        description: input.description === undefined ? undefined : this.text(input.description, 'description'),
+      },
+    });
+    return this.bill(bill);
   }
   async updateBill(
     ownerId: string,
@@ -236,7 +257,7 @@ export class DebtService {
     return this.database.client.$transaction(async (tx) => {
       const group = await tx.group.findFirst({
         where: { id: groupId, ownerId },
-        include: { members: { select: { id: true } } },
+        include: { members: { select: { personId: true } } },
       });
       if (!group) throw new NotFoundException('Group not found');
       if (!group.members.length)
@@ -252,20 +273,67 @@ export class DebtService {
           createdBy,
         },
       });
-      const updatedMembers = await tx.groupMember.updateMany({
-        where: { groupId },
-        data: {
-          balance: { increment: amountPerPerson },
-          paymentStatus: 'PENDING',
-        },
+      await tx.bill.createMany({
+        data: group.members.map((member) => ({
+          id: randomUUID(), groupId, personId: member.personId, amount: amountPerPerson,
+          description,
+        })),
       });
       await tx.group.update({
         where: { id: groupId },
         data: {
-          totalOwed: { increment: amountPerPerson * updatedMembers.count },
+          totalOwed: { increment: amountPerPerson * group.members.length },
         },
       });
       return this.charge(charge);
+    });
+  }
+
+  async payGroupBills(ownerId: string, groupId: string, personId: string, input: PayBillsDto) {
+    await this.getGroupEntity(ownerId, groupId);
+    return this.payBills({ groupId, personId }, input, groupId);
+  }
+
+  async payPersonalBills(ownerId: string, personId: string, input: PayBillsDto) {
+    await this.assertPeopleOwned(ownerId, [this.personId(personId)]);
+    return this.payBills({ groupId: null, personId }, input);
+  }
+
+  /** Payment always applies to complete payable bills: one selected bill or every open bill. */
+  private async payBills(
+    where: { groupId: string | null; personId: string }, input: PayBillsDto, groupId?: string,
+  ) {
+    if (input.scope !== 'one' && input.scope !== 'all')
+      throw new BadRequestException('scope must be one or all');
+    if (input.scope === 'one' && !input.billId)
+      throw new BadRequestException('billId is required when scope is one');
+    return this.database.client.$transaction(async (tx) => {
+      const bills = await tx.bill.findMany({
+        where: {
+          ...where, paymentStatus: 'PENDING',
+          ...(input.scope === 'one' ? { id: input.billId } : {}),
+        },
+      });
+      if (!bills.length) throw new NotFoundException('No unpaid bill found');
+      const total = bills.reduce((sum, bill) => sum + Number(bill.amount), 0);
+      await tx.bill.updateMany({
+        where: { id: { in: bills.map((bill) => bill.id) } },
+        data: { paymentStatus: 'PAID', paidAt: new Date() },
+      });
+      if (groupId) {
+        await tx.group.update({ where: { id: groupId }, data: { totalOwed: { decrement: total } } });
+        const outstanding = await tx.bill.aggregate({
+          where: { groupId, personId: where.personId, paymentStatus: 'PENDING' }, _sum: { amount: true },
+        });
+        await tx.groupMember.updateMany({
+          where: { groupId, personId: where.personId },
+          data: {
+            balance: Number(outstanding._sum.amount ?? 0),
+            paymentStatus: Number(outstanding._sum.amount ?? 0) > 0 ? 'PENDING' : 'PAID',
+          },
+        });
+      }
+      return { paidBillIds: bills.map((bill) => bill.id), totalPaid: total };
     });
   }
 
@@ -360,7 +428,7 @@ export class DebtService {
     for (const row of memberRows)
       members.set(row.personId, {
         person: this.person(row.person),
-        totalOwed: Number(row.balance),
+        totalOwed: 0,
         billCount: 0,
         balance: Number(row.balance),
         paymentStatus: row.paymentStatus,
@@ -375,12 +443,15 @@ export class DebtService {
         balance: 0,
         paymentStatus: 'PAID',
       };
-      member.totalOwed += bill.amount;
-      member.billCount += 1;
+      if (bill.paymentStatus === 'PENDING') {
+        member.totalOwed += bill.amount;
+        member.billCount += 1;
+      }
       members.set(person.id, member);
     }
+    const totalOwed = [...members.values()].reduce((sum, member) => sum + member.totalOwed, 0);
     return {
-      ...group,
+      ...group, totalOwed,
       bills,
       charges: chargeRows.map((row) => this.charge(row)),
       discounts: discountRows.map((row) => this.discount(row)),
@@ -421,17 +492,21 @@ export class DebtService {
   }
   private bill(row: {
     id: string;
-    groupId: string;
+    groupId: string | null;
     personId: string;
     amount: { toString(): string };
     description: string | null;
     createdAt: Date;
     updatedAt: Date;
+    paymentStatus: string;
+    paidAt: Date | null;
   }): Bill {
     return {
       ...row,
+      groupId: row.groupId ?? undefined,
       amount: Number(row.amount),
       description: row.description ?? undefined,
+      paidAt: row.paidAt ?? undefined,
     };
   }
   private text(value: unknown, field: string): string {

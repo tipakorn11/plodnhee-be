@@ -151,6 +151,8 @@ export const BillScalarFieldEnum = {
   personId: 'personId',
   amount: 'amount',
   description: 'description',
+  paymentStatus: 'paymentStatus',
+  paidAt: 'paidAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

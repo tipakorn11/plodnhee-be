@@ -40,6 +40,8 @@ export type BillMinAggregateOutputType = {
   personId: string | null
   amount: runtime.Decimal | null
   description: string | null
+  paymentStatus: $Enums.PaymentStatus | null
+  paidAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -50,6 +52,8 @@ export type BillMaxAggregateOutputType = {
   personId: string | null
   amount: runtime.Decimal | null
   description: string | null
+  paymentStatus: $Enums.PaymentStatus | null
+  paidAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -60,6 +64,8 @@ export type BillCountAggregateOutputType = {
   personId: number
   amount: number
   description: number
+  paymentStatus: number
+  paidAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -80,6 +86,8 @@ export type BillMinAggregateInputType = {
   personId?: true
   amount?: true
   description?: true
+  paymentStatus?: true
+  paidAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -90,6 +98,8 @@ export type BillMaxAggregateInputType = {
   personId?: true
   amount?: true
   description?: true
+  paymentStatus?: true
+  paidAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -100,6 +110,8 @@ export type BillCountAggregateInputType = {
   personId?: true
   amount?: true
   description?: true
+  paymentStatus?: true
+  paidAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -193,10 +205,12 @@ export type BillGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 
 export type BillGroupByOutputType = {
   id: string
-  groupId: string
+  groupId: string | null
   personId: string
   amount: runtime.Decimal
   description: string | null
+  paymentStatus: $Enums.PaymentStatus
+  paidAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: BillCountAggregateOutputType | null
@@ -226,22 +240,26 @@ export type BillWhereInput = {
   OR?: Prisma.BillWhereInput[]
   NOT?: Prisma.BillWhereInput | Prisma.BillWhereInput[]
   id?: Prisma.StringFilter<"Bill"> | string
-  groupId?: Prisma.StringFilter<"Bill"> | string
+  groupId?: Prisma.StringNullableFilter<"Bill"> | string | null
   personId?: Prisma.StringFilter<"Bill"> | string
   amount?: Prisma.DecimalFilter<"Bill"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.StringNullableFilter<"Bill"> | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFilter<"Bill"> | $Enums.PaymentStatus
+  paidAt?: Prisma.DateTimeNullableFilter<"Bill"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Bill"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Bill"> | Date | string
-  group?: Prisma.XOR<Prisma.GroupScalarRelationFilter, Prisma.GroupWhereInput>
+  group?: Prisma.XOR<Prisma.GroupNullableScalarRelationFilter, Prisma.GroupWhereInput> | null
   person?: Prisma.XOR<Prisma.PersonScalarRelationFilter, Prisma.PersonWhereInput>
 }
 
 export type BillOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
+  groupId?: Prisma.SortOrderInput | Prisma.SortOrder
   personId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
+  paidAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   group?: Prisma.GroupOrderByWithRelationInput
@@ -253,22 +271,26 @@ export type BillWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.BillWhereInput | Prisma.BillWhereInput[]
   OR?: Prisma.BillWhereInput[]
   NOT?: Prisma.BillWhereInput | Prisma.BillWhereInput[]
-  groupId?: Prisma.StringFilter<"Bill"> | string
+  groupId?: Prisma.StringNullableFilter<"Bill"> | string | null
   personId?: Prisma.StringFilter<"Bill"> | string
   amount?: Prisma.DecimalFilter<"Bill"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.StringNullableFilter<"Bill"> | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFilter<"Bill"> | $Enums.PaymentStatus
+  paidAt?: Prisma.DateTimeNullableFilter<"Bill"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Bill"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Bill"> | Date | string
-  group?: Prisma.XOR<Prisma.GroupScalarRelationFilter, Prisma.GroupWhereInput>
+  group?: Prisma.XOR<Prisma.GroupNullableScalarRelationFilter, Prisma.GroupWhereInput> | null
   person?: Prisma.XOR<Prisma.PersonScalarRelationFilter, Prisma.PersonWhereInput>
 }, "id">
 
 export type BillOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
+  groupId?: Prisma.SortOrderInput | Prisma.SortOrder
   personId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
+  paidAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.BillCountOrderByAggregateInput
@@ -283,10 +305,12 @@ export type BillScalarWhereWithAggregatesInput = {
   OR?: Prisma.BillScalarWhereWithAggregatesInput[]
   NOT?: Prisma.BillScalarWhereWithAggregatesInput | Prisma.BillScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Bill"> | string
-  groupId?: Prisma.StringWithAggregatesFilter<"Bill"> | string
+  groupId?: Prisma.StringNullableWithAggregatesFilter<"Bill"> | string | null
   personId?: Prisma.StringWithAggregatesFilter<"Bill"> | string
   amount?: Prisma.DecimalWithAggregatesFilter<"Bill"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Bill"> | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusWithAggregatesFilter<"Bill"> | $Enums.PaymentStatus
+  paidAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Bill"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Bill"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Bill"> | Date | string
 }
@@ -295,18 +319,22 @@ export type BillCreateInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  paymentStatus?: $Enums.PaymentStatus
+  paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  group: Prisma.GroupCreateNestedOneWithoutBillsInput
+  group?: Prisma.GroupCreateNestedOneWithoutBillsInput
   person: Prisma.PersonCreateNestedOneWithoutBillsInput
 }
 
 export type BillUncheckedCreateInput = {
   id?: string
-  groupId: string
+  groupId?: string | null
   personId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  paymentStatus?: $Enums.PaymentStatus
+  paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -315,28 +343,34 @@ export type BillUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  group?: Prisma.GroupUpdateOneRequiredWithoutBillsNestedInput
+  group?: Prisma.GroupUpdateOneWithoutBillsNestedInput
   person?: Prisma.PersonUpdateOneRequiredWithoutBillsNestedInput
 }
 
 export type BillUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BillCreateManyInput = {
   id?: string
-  groupId: string
+  groupId?: string | null
   personId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  paymentStatus?: $Enums.PaymentStatus
+  paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -345,16 +379,20 @@ export type BillUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BillUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   personId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -375,6 +413,8 @@ export type BillCountOrderByAggregateInput = {
   personId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
+  paidAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -389,6 +429,8 @@ export type BillMaxOrderByAggregateInput = {
   personId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
+  paidAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -399,6 +441,8 @@ export type BillMinOrderByAggregateInput = {
   personId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
+  paidAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -491,20 +535,28 @@ export type BillUncheckedUpdateManyWithoutGroupNestedInput = {
   deleteMany?: Prisma.BillScalarWhereInput | Prisma.BillScalarWhereInput[]
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type BillCreateWithoutPersonInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  paymentStatus?: $Enums.PaymentStatus
+  paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  group: Prisma.GroupCreateNestedOneWithoutBillsInput
+  group?: Prisma.GroupCreateNestedOneWithoutBillsInput
 }
 
 export type BillUncheckedCreateWithoutPersonInput = {
   id?: string
-  groupId: string
+  groupId?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  paymentStatus?: $Enums.PaymentStatus
+  paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -540,10 +592,12 @@ export type BillScalarWhereInput = {
   OR?: Prisma.BillScalarWhereInput[]
   NOT?: Prisma.BillScalarWhereInput | Prisma.BillScalarWhereInput[]
   id?: Prisma.StringFilter<"Bill"> | string
-  groupId?: Prisma.StringFilter<"Bill"> | string
+  groupId?: Prisma.StringNullableFilter<"Bill"> | string | null
   personId?: Prisma.StringFilter<"Bill"> | string
   amount?: Prisma.DecimalFilter<"Bill"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.StringNullableFilter<"Bill"> | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFilter<"Bill"> | $Enums.PaymentStatus
+  paidAt?: Prisma.DateTimeNullableFilter<"Bill"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Bill"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Bill"> | Date | string
 }
@@ -552,6 +606,8 @@ export type BillCreateWithoutGroupInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  paymentStatus?: $Enums.PaymentStatus
+  paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   person: Prisma.PersonCreateNestedOneWithoutBillsInput
@@ -562,6 +618,8 @@ export type BillUncheckedCreateWithoutGroupInput = {
   personId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  paymentStatus?: $Enums.PaymentStatus
+  paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -594,9 +652,11 @@ export type BillUpdateManyWithWhereWithoutGroupInput = {
 
 export type BillCreateManyPersonInput = {
   id?: string
-  groupId: string
+  groupId?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  paymentStatus?: $Enums.PaymentStatus
+  paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -605,25 +665,31 @@ export type BillUpdateWithoutPersonInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  group?: Prisma.GroupUpdateOneRequiredWithoutBillsNestedInput
+  group?: Prisma.GroupUpdateOneWithoutBillsNestedInput
 }
 
 export type BillUncheckedUpdateWithoutPersonInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BillUncheckedUpdateManyWithoutPersonInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  groupId?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -633,6 +699,8 @@ export type BillCreateManyGroupInput = {
   personId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  paymentStatus?: $Enums.PaymentStatus
+  paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -641,6 +709,8 @@ export type BillUpdateWithoutGroupInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   person?: Prisma.PersonUpdateOneRequiredWithoutBillsNestedInput
@@ -651,6 +721,8 @@ export type BillUncheckedUpdateWithoutGroupInput = {
   personId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -660,6 +732,8 @@ export type BillUncheckedUpdateManyWithoutGroupInput = {
   personId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -672,9 +746,11 @@ export type BillSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   personId?: boolean
   amount?: boolean
   description?: boolean
+  paymentStatus?: boolean
+  paidAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
+  group?: boolean | Prisma.Bill$groupArgs<ExtArgs>
   person?: boolean | Prisma.PersonDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["bill"]>
 
@@ -684,9 +760,11 @@ export type BillSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   personId?: boolean
   amount?: boolean
   description?: boolean
+  paymentStatus?: boolean
+  paidAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
+  group?: boolean | Prisma.Bill$groupArgs<ExtArgs>
   person?: boolean | Prisma.PersonDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["bill"]>
 
@@ -696,9 +774,11 @@ export type BillSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   personId?: boolean
   amount?: boolean
   description?: boolean
+  paymentStatus?: boolean
+  paidAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
+  group?: boolean | Prisma.Bill$groupArgs<ExtArgs>
   person?: boolean | Prisma.PersonDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["bill"]>
 
@@ -708,36 +788,40 @@ export type BillSelectScalar = {
   personId?: boolean
   amount?: boolean
   description?: boolean
+  paymentStatus?: boolean
+  paidAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type BillOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "groupId" | "personId" | "amount" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["bill"]>
+export type BillOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "groupId" | "personId" | "amount" | "description" | "paymentStatus" | "paidAt" | "createdAt" | "updatedAt", ExtArgs["result"]["bill"]>
 export type BillInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
+  group?: boolean | Prisma.Bill$groupArgs<ExtArgs>
   person?: boolean | Prisma.PersonDefaultArgs<ExtArgs>
 }
 export type BillIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
+  group?: boolean | Prisma.Bill$groupArgs<ExtArgs>
   person?: boolean | Prisma.PersonDefaultArgs<ExtArgs>
 }
 export type BillIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
+  group?: boolean | Prisma.Bill$groupArgs<ExtArgs>
   person?: boolean | Prisma.PersonDefaultArgs<ExtArgs>
 }
 
 export type $BillPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Bill"
   objects: {
-    group: Prisma.$GroupPayload<ExtArgs>
+    group: Prisma.$GroupPayload<ExtArgs> | null
     person: Prisma.$PersonPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    groupId: string
+    groupId: string | null
     personId: string
     amount: runtime.Decimal
     description: string | null
+    paymentStatus: $Enums.PaymentStatus
+    paidAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["bill"]>
@@ -1134,7 +1218,7 @@ readonly fields: BillFieldRefs;
  */
 export interface Prisma__BillClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  group<T extends Prisma.GroupDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GroupDefaultArgs<ExtArgs>>): Prisma.Prisma__GroupClient<runtime.Types.Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  group<T extends Prisma.Bill$groupArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Bill$groupArgs<ExtArgs>>): Prisma.Prisma__GroupClient<runtime.Types.Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   person<T extends Prisma.PersonDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PersonDefaultArgs<ExtArgs>>): Prisma.Prisma__PersonClient<runtime.Types.Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1170,6 +1254,8 @@ export interface BillFieldRefs {
   readonly personId: Prisma.FieldRef<"Bill", 'String'>
   readonly amount: Prisma.FieldRef<"Bill", 'Decimal'>
   readonly description: Prisma.FieldRef<"Bill", 'String'>
+  readonly paymentStatus: Prisma.FieldRef<"Bill", 'PaymentStatus'>
+  readonly paidAt: Prisma.FieldRef<"Bill", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Bill", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Bill", 'DateTime'>
 }
@@ -1570,6 +1656,25 @@ export type BillDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Bills to delete.
    */
   limit?: number
+}
+
+/**
+ * Bill.group
+ */
+export type Bill$groupArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Group
+   */
+  select?: Prisma.GroupSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Group
+   */
+  omit?: Prisma.GroupOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GroupInclude<ExtArgs> | null
+  where?: Prisma.GroupWhereInput
 }
 
 /**

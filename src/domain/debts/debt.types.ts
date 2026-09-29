@@ -4,6 +4,9 @@ export interface Person {
   name: string;
   profileImageUrl?: string;
   createdAt: Date;
+  personalTotalOwed?: number;
+  personalBillCount?: number;
+  personalBills?: Bill[];
 }
 
 export interface Group {
@@ -35,10 +38,12 @@ export interface MemberDiscount {
 
 export interface Bill {
   id: string;
-  groupId: string;
+  groupId?: string;
   personId: string;
   amount: number;
   description?: string;
   createdAt: Date;
   updatedAt: Date;
+  paymentStatus: string;
+  paidAt?: Date;
 }
