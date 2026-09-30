@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { GetHealthStatusUseCase } from '../../../application/health/get-health-status.use-case.js';
 import { HealthController } from './health.controller.js';
+import { PrismaService } from '../../../infrastructure/database/prisma.service.js';
 
 describe('HealthController', () => {
   let healthController: HealthController;
@@ -8,7 +9,10 @@ describe('HealthController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [HealthController],
-      providers: [GetHealthStatusUseCase],
+      providers: [
+        GetHealthStatusUseCase,
+        { provide: PrismaService, useValue: { client: { $queryRaw: vi.fn() } } },
+      ],
     }).compile();
 
     healthController = app.get<HealthController>(HealthController);

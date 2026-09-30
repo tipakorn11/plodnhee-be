@@ -1,6 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "regions": ["hnd1"],
+  "crons": [
+    {
+      "path": "/api/keep-alive",
+      "schedule": "17 12 * * *"
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/(.*)",

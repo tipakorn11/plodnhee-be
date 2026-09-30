@@ -53,6 +53,14 @@ Data is stored in Supabase Postgres through Prisma. Set `DATABASE_URL`, then run
 `npm run db:migrate` to apply the committed migration. Vercel must have the same
 `DATABASE_URL` and runs `prisma generate` during installation.
 
+## Supabase keep-alive
+
+The production Vercel deployment calls `GET /api/keep-alive` every day at 12:17
+UTC. The protected route runs `SELECT 1` through Prisma, creating external
+database activity. Set a random `CRON_SECRET` (at least 16 characters) in
+Vercel's Production environment before deploying; Vercel supplies it as a
+Bearer token when it invokes the cron route.
+
 ## Authentication
 
 Normal email/password authentication is included:
