@@ -130,6 +130,10 @@ export class DebtService {
   async getGroup(ownerId: string, id: string) {
     return this.groupDetail(await this.getGroupEntity(ownerId, id));
   }
+  async deleteGroup(ownerId: string, id: string): Promise<void> {
+    await this.getGroupEntity(ownerId, id);
+    await this.database.client.group.delete({ where: { id } });
+  }
   async createBill(
     ownerId: string,
     groupId: string,
@@ -299,7 +303,7 @@ export class DebtService {
     return this.payBills({ groupId: null, personId }, input);
   }
 
-  /** Payment always applies to complete payable bills: one selected bill or every open bill. */
+  /** Payment clears one bill, all bills, or a portion of one selected bill. */
   private async payBills(
     where: { groupId: string | null; personId: string }, input: PayBillsDto, groupId?: string,
   ) {
@@ -307,6 +311,8 @@ export class DebtService {
       throw new BadRequestException('scope must be one or all');
     if (input.scope === 'one' && !input.billId)
       throw new BadRequestException('billId is required when scope is one');
+    if (input.amount !== undefined && input.scope !== 'one')
+      throw new BadRequestException('amount can only be used when scope is one');
     return this.database.client.$transaction(async (tx) => {
       const bills = await tx.bill.findMany({
         where: {
@@ -315,11 +321,20 @@ export class DebtService {
         },
       });
       if (!bills.length) throw new NotFoundException('No unpaid bill found');
-      const total = bills.reduce((sum, bill) => sum + Number(bill.amount), 0);
-      await tx.bill.updateMany({
-        where: { id: { in: bills.map((bill) => bill.id) } },
-        data: { paymentStatus: 'PAID', paidAt: new Date() },
-      });
+      const bill = bills[0];
+      const total = input.amount === undefined
+        ? bills.reduce((sum, item) => sum + Number(item.amount), 0)
+        : this.amount(input.amount);
+      if (input.amount !== undefined && total > Number(bill.amount))
+        throw new BadRequestException('amount cannot exceed the outstanding bill');
+      if (input.amount !== undefined && total < Number(bill.amount)) {
+        await tx.bill.update({ where: { id: bill.id }, data: { amount: { decrement: total } } });
+      } else {
+        await tx.bill.updateMany({
+          where: { id: { in: bills.map((item) => item.id) } },
+          data: { paymentStatus: 'PAID', paidAt: new Date() },
+        });
+      }
       if (groupId) {
         await tx.group.update({ where: { id: groupId }, data: { totalOwed: { decrement: total } } });
         const outstanding = await tx.bill.aggregate({

@@ -38,4 +38,6 @@ export interface PayBillsDto {
   /** `one` requires billId; `all` clears every currently unpaid bill. */
   scope: 'one' | 'all';
   billId?: string;
+  /** A partial payment can only be made against one bill. */
+  amount?: number;
 }

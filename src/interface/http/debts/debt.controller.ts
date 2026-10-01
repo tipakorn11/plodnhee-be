@@ -13,6 +13,7 @@ export class DebtController {
   @Post('groups') createGroup(@Req() req: AuthenticatedRequest, @Body() body: CreateGroupDto) { return this.debts.createGroup(req.user.id, body); }
   @Get('groups') listGroups(@Req() req: AuthenticatedRequest) { return this.debts.listGroups(req.user.id); }
   @Get('groups/:groupId') getGroup(@Req() req: AuthenticatedRequest, @Param('groupId') groupId: string) { return this.debts.getGroup(req.user.id, groupId); }
+  @Delete('groups/:groupId') @HttpCode(204) async deleteGroup(@Req() req: AuthenticatedRequest, @Param('groupId') groupId: string): Promise<void> { await this.debts.deleteGroup(req.user.id, groupId); }
   @Post('groups/:groupId/members') addGroupMember(@Req() req: AuthenticatedRequest, @Param('groupId') groupId: string, @Body() body: AddGroupMemberDto) { return this.debts.addGroupMember(req.user.id, groupId, body); }
   @Post('expense-groups/:groupId/charges') createGroupCharge(@Req() req: AuthenticatedRequest, @Param('groupId') groupId: string, @Body() body: CreateGroupChargeDto) { return this.debts.createGroupCharge(req.user.id, groupId, body); }
   @Post('expense-groups/:groupId/members/:personId/discounts') createMemberDiscount(@Req() req: AuthenticatedRequest, @Param('groupId') groupId: string, @Param('personId') personId: string, @Body() body: CreateMemberDiscountDto) { return this.debts.createMemberDiscount(req.user.id, groupId, personId, body); }
